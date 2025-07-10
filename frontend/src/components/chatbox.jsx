@@ -36,24 +36,7 @@ function Chatbox({ user, id }) {
 
     fetchChatHistory();
   }, [id]);
-  // it fetch previous chat history
-  useEffect(() => {
-    async function fetchAllChat() {
-      try {
-        const response = await axios.get(`/chat/AllchatForThisUser`, {
-          params: { userId: user.id || user._id }, // pass ID in query
-        });
-
-        if (response.data && Array.isArray(response.data)) {
-          SetAllchat(response.data);
-        } 
-      } catch (error) {
-        console.error("Error fetching chat history:", error);
-      }
-    }
-
-    if (user) fetchAllChat();
-  }, [user]);
+  
 
   async function handleInputData(e) {
     e.preventDefault();
