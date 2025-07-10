@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import Dashboard from "./pages/Dashboard";
@@ -12,6 +12,7 @@ function App() {
 
   useEffect(() => {
     const token = Cookies.get("token");
+
     if (token) {
       const decoded = JSON.parse(decodeURIComponent(token));
       setUser(decoded);
@@ -22,9 +23,26 @@ function App() {
 
   return (
     <Router>
-      <Navbar user={user} setUser={setUser} /> {/* pass user and setUser as props */}
+      <Navbar user={user} setUser={setUser} />{" "}
+      {/* pass user and setUser as props */}
       <Routes>
-        <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Dashboard user={user} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat/:id"
+          element={
+            <ProtectedRoute user={user}>
+              <Dashboard user={user} />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/signin" element={<SignInPage setUser={setUser} />} />
         <Route path="/signup" element={<SignUpPage />} />
       </Routes>

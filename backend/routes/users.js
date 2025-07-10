@@ -5,9 +5,9 @@ const User = require("../models/user");
 const cookieParser = require("cookie-parser");
 
 router.post("/signin", async (req, res) => {
-    const { email, password } = req.body;
 
     try {
+    const { email, password } = req.body;
         const user = await User.findOne({ email, password });
 
         if (!user) {
@@ -22,18 +22,19 @@ router.post("/signin", async (req, res) => {
 
         const token = jwt.sign(payload, "asdfghjkl", { expiresIn: "7d" });
 
-        res.cookie("token", token, { httpOnly: true });
+        res.cookie("token", token, { path: "/", maxAge: 7 * 24 * 60 * 60 * 1000 });
 
         return res.status(200).json({ message: "Login successful", token, user: payload });
+
     } catch (error) {
-        return res.status(500).json({ error: "Server error" }); 
+        return res.status(500).json({ error: "Server error" });
     }
 });
 
 router.post("/signup", async (req, res) => {
-    const { username, email, password } = req.body;
 
     try {
+        const { username, email, password } = req.body;
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {

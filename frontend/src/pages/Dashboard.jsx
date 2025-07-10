@@ -1,59 +1,38 @@
 import "../styles/dashboard.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "../axiosInstance.js";
+import Chatbox from "../components/chatbox.jsx";
 
-const Dashboard = () => {
-  const [Data, SetData] = useState([{
-  "role": "Surveyor",
-  "message": "Human Resources Assistant IV"
-}, {
-  "role":"Engineer",
-  "message" : "fgiktityyreehjkliukyjthrg"
-}, {
-  "role":"Engineer",
-  "message" : "fgiktityyreehjkliukyjthrg"
-}, {
-  "role":"Engineer",
-  "message" : "fgiktityyreehjkliukyjthrg"
-}, {
-  "role":"Engineer",
-  "message" : "fgiktityyreehjkliukyjthrg"
-},{
-  "role": "Surveyor",
-  "message": "Human Resources Assistant IV"
-},{
-  "role": "Surveyor",
-  "message": "Human Resources Assistant IV"
-},{
-  "role": "Surveyor",
-  "message": "Human Resources Assistant IV"
-}]
-);
-  return (
-    <dashboard className="dashboard">
-      <div className="history"></div>
-      <div className="home">
-        <div className="mid">
-          {Data ? (
-            <div>
-              
-                {Data.map((e, index) => (
-                  <div key={index}>
-                    {e.role === "Engineer" ? <p className="message1">{e.message}</p> : null}
-                    {e.role === "Surveyor" ? <p className="message2">{e.message}</p> : null}
-                  </div>
-                ))}
-              
-            </div>
-          ) : (
-            <div>
-              <h1>What can I help with?</h1>
-            </div>
-          )}
-        </div>
-        <div className="searchbar"></div>
-      </div>
-    </dashboard>
-  );
+const Dashboard = ({ user }) => {
+  const { id } = useParams();
+  const [chatId, setChatId] = useState(id || null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const initChat = async () => {
+      if (id) return; // Already have chatId from URL
+
+      try {
+        const res = await axios.post("/chat/createNewChat", {
+          userdata: { id: user?.id || user?._id },
+        });
+
+        if (res.data?._id) {
+          setChatId(res.data._id);
+          navigate(`/chat/${res.data._id}`, { replace: true });
+        }
+      } catch (err) {
+        console.error("Failed to create new chat:", err);
+      }
+    };
+
+    if (user) {
+      initChat();
+    }
+  }, [id, user, navigate]);
+
+  return chatId ? <Chatbox user={user} id={chatId} /> : <h2>Loading chat...</h2>;
 };
 
 export default Dashboard;

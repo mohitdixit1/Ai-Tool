@@ -1,29 +1,32 @@
-import '../styles/form.css';
+import "../styles/form.css";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import axios from "axios";
-import Cookies from 'js-cookie';
+import axios from "../axiosInstance.js";
+import Cookies from "js-cookie";
 
 const SignInPage = ({ setUser }) => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   async function handleLogin(e) {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/user/signin", {
+      const res = await axios.post("/user/signin", {
         email,
         password,
       });
 
       const user = res.data.user;
-      Cookies.set('token', JSON.stringify(user), { expires: 7 });
-      setUser(user); // Update global user state
-      navigate("/");
+      Cookies.set("token", JSON.stringify(user), { expires: 7, path: "/" });
+      
+      setUser(user);
+      setTimeout(() => {
+        navigate("/");
+      }, 100);
     } catch (error) {
       setError(error.response?.data?.message || "Login failed");
       console.error("Login error:", error);
@@ -31,7 +34,7 @@ const SignInPage = ({ setUser }) => {
   }
 
   return (
-    <div className='page-center'>
+    <div className="page-center">
       <div className="container">
         <form onSubmit={handleLogin}>
           <h1>Sign In</h1>
@@ -54,7 +57,7 @@ const SignInPage = ({ setUser }) => {
 
           <button type="submit">Sign In</button>
 
-          {error && <p className='error'>{error}</p>}
+          {error && <p className="error">{error}</p>}
 
           <p>
             Don't have an account? <Link to="/signup">Sign up</Link>

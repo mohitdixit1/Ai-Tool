@@ -16,6 +16,8 @@ UserSchema = new Schema({
         required: true
     },
 },{timestamps:true})
+
+
 Usermodel = model('User', UserSchema);
 
 
