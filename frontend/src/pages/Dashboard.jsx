@@ -1,4 +1,3 @@
-import "../styles/dashboard.css";
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "../axiosInstance.js";
@@ -10,12 +9,12 @@ const Dashboard = ({ user }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const initChat = async () => {
-      if (id) return; // Already have chatId from URL
+    if (id || !user) return;
 
+    const createChat = async () => {
       try {
         const res = await axios.post("/chat/createNewChat", {
-          userdata: { id: user?.id || user?._id },
+          userdata: { id: user._id || user.id },
         });
 
         if (res.data?._id) {
@@ -27,9 +26,7 @@ const Dashboard = ({ user }) => {
       }
     };
 
-    if (user) {
-      initChat();
-    }
+    createChat();
   }, [id, user, navigate]);
 
   return chatId ? <Chatbox user={user} id={chatId} /> : <h2>Loading chat...</h2>;

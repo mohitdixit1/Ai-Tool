@@ -1,7 +1,8 @@
-import "../styles/dashboard.css";
+import "../styles/chatbox.css";
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "../axiosInstance.js";
+import ChatbotHistory from "./chatboxHistory.jsx";
 
 function Chatbox({ user, id }) {
   const [messages, setMessages] = useState([]);
@@ -89,23 +90,7 @@ function Chatbox({ user, id }) {
 
   return (
     <div className="dashboard">
-      <div className="history">
-        <Link to="/" className="new-chat">
-          + New Chat
-        </Link>
-
-        <div className="chat-list">
-          {Allchat.map((e) => (
-            <div
-              className="history-chat"
-              key={e._id}
-              onClick={() => navigate(`/chat/${e._id}`)}
-            >
-              <p>{e.ChatData[0]?.message || "Untitled Chat"}</p>
-            </div>
-          ))}
-        </div>
-      </div>
+      <ChatbotHistory user={user} SetAllchat={SetAllchat} Allchat={Allchat} />
 
       <div className="home">
         <div className="mid">
