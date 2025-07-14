@@ -73,7 +73,7 @@ function Chatbox({ user, id }) {
 
   return (
     <div className="dashboard">
-      <ChatbotHistory user={user} SetAllchat={SetAllchat} Allchat={Allchat} />
+      <ChatbotHistory user={user} SetAllchat={SetAllchat} Allchat={Allchat} id={id} />
 
       <div className="home">
         <div className="mid">

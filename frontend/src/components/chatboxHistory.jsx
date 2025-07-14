@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "../axiosInstance.js";
 
-function ChatbotHistory({ user, SetAllchat, Allchat }) {
+function ChatbotHistory({ user, SetAllchat, Allchat ,id}) {
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ function ChatbotHistory({ user, SetAllchat, Allchat }) {
     }
 
     if (user) fetchAllChat();
-  }, [user]);
+  }, [user,id]);
 
   return (
     <div className="history">
